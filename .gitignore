@@ -30,3 +30,8 @@ go.work.sum
 # Editor/IDE
 # .idea/
 # .vscode/
+
+ghostty-source-current.tar.gz
+ghostty-source-current.tar.gz.minisig
+ghostty-source.tar.gz
+ghostty-source.tar.gz.minisig
