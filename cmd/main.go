@@ -49,9 +49,19 @@ func main() {
 	}
 
 	logger.Info("Building and installing Ghostty")
+	cwd, err := os.Getwd()
+	if err != nil {
+		logger.Error("could not get current working directory", "err", err)
+		os.Exit(1)
+	}
+	localCacheDir := filepath.Join(cwd, ".zig-cache")
 	tipVersion := strings.TrimPrefix(outDir, "ghostty-")
 	zigBuildOutDir := filepath.Join(os.Getenv("HOME"), ".local")
-	cmd := exec.Command("zig", "build", "-p", zigBuildOutDir, "-Doptimize=ReleaseFast", "-Dversion-string="+tipVersion)
+	cmd := exec.Command("zig", "build",
+		"--cache-dir", localCacheDir,
+		"-p", zigBuildOutDir,
+		"-Doptimize=ReleaseFast",
+		"-Dversion-string="+tipVersion)
 	cmd.Dir = outDir
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
