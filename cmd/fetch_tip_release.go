@@ -55,7 +55,12 @@ func fetchTipRelease() GhosttyTarball {
 		logger.Error("couldn't fetch the tip release", "err", err)
 		os.Exit(1)
 	}
-	defer resp.Body.Close()
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			logger.Error("couldn't close the response body", "err", err)
+			os.Exit(1)
+		}
+	}()
 
 	var response fetchTipReleaseResponse
 	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {

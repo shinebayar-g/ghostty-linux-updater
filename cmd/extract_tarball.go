@@ -9,18 +9,26 @@ import (
 	"strings"
 )
 
-func untar(file string) (dirname string, err error) {
-	f, err := os.Open(file)
+func untar(filePath string) (dirname string, err error) {
+	file, err := os.Open(filePath)
 	if err != nil {
 		return "", err
 	}
-	defer f.Close()
+	defer func() {
+		if err := file.Close(); err != nil {
+			logger.Error("couldn't close the file", "err", err)
+		}
+	}()
 
-	gzr, err := gzip.NewReader(f)
+	gzr, err := gzip.NewReader(file)
 	if err != nil {
 		return "", err
 	}
-	defer gzr.Close()
+	defer func() {
+		if err := gzr.Close(); err != nil {
+			logger.Error("couldn't close the gzip reader", "err", err)
+		}
+	}()
 
 	tr := tar.NewReader(gzr)
 
@@ -45,7 +53,11 @@ func untar(file string) (dirname string, err error) {
 			if err != nil {
 				return "", err
 			}
-			defer outFile.Close()
+			defer func() {
+				if err := outFile.Close(); err != nil {
+					logger.Error("couldn't close the file", "err", err)
+				}
+			}()
 
 			if _, err := io.Copy(outFile, tr); err != nil {
 				return "", err

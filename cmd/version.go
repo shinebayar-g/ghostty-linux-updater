@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"os/exec"
 )
@@ -13,5 +12,5 @@ func ghosttyVersion() string {
 		logger.Error("couldn't check the Ghossty version", "err", err)
 		os.Exit(1)
 	}
-	return fmt.Sprintf("%s", out)
+	return string(out)
 }
