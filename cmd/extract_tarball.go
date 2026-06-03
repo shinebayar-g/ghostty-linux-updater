@@ -64,6 +64,10 @@ func untar(filePath string) (dirname string, err error) {
 			}
 		case tar.TypeXGlobalHeader:
 			continue
+		case tar.TypeSymlink:
+			if err := os.Symlink(header.Linkname, header.Name); err != nil {
+				return "", err
+			}
 		default:
 			return "", fmt.Errorf("unsupported file type: %c in %s", header.Typeflag, header.Name)
 		}
