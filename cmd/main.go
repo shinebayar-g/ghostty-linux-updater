@@ -71,6 +71,6 @@ func main() {
 	}
 
 	cleanup(outDir, oldFilename, newFilename, sigFilename)
-	logger.Info("Ghossty is updated successfully!")
+	logger.Info("Ghostty is updated successfully!")
 	fmt.Print(ghosttyVersion())
 }
